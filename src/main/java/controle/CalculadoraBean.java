@@ -3,6 +3,8 @@ package controle;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
 
+import util.JpaUtil;
+
 @ManagedBean(name = "CalculadoraBean")
 @RequestScoped
 public class CalculadoraBean {
@@ -12,6 +14,7 @@ public class CalculadoraBean {
 	public void somar() {
 		System.out.println("-- somar --");
 		this.resultado = this.valor1 + this.valor2;
+		JpaUtil.getEntityManager();
 	}
 
 	public double getValor1() {
