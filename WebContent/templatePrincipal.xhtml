@@ -4,10 +4,11 @@
 	xmlns:ui="http://java.sun.com/jsf/facelets">
 <h:head>
 	<title>Projeto Agenda Cliente Contatos</title>
+	<h:outputStylesheet library="css" name="padrao.css"/>
 </h:head>
 <h:body>
 	<h:form>
-		<table border="2" style="width: 100%; height: 100px;">
+		<table border="2">
 			<tr>
 				<td colspan="2">
 					<ui:insert name="cabecalho">
@@ -22,6 +23,7 @@
 	
 								<p:menuitem value="Tela inicial" url="./telaPrincipal.xhtml" />
 								<p:menuitem value="Login" url="./login.xhtml" />
+								<p:menuitem value="Cadastro de cliente" url="./cadastroCliente.xhtml" />
 	
 							</p:submenu>
 						</p:menu>

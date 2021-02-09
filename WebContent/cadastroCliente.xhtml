@@ -1,0 +1,90 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+
+<ui:composition template="/templatePrincipal.xhtml">
+	<ui:define name="cabecalho">
+		<h1 class="teste">Cadastro de Cliente</h1>
+	</ui:define>
+	<ui:define name="conteudo">
+		<p:panelGrid style="width: 100%">
+			<p:row>
+				<p:column>
+					<p:outputLabel value="CPF:" />
+				</p:column>
+				<p:column colspan="3">
+					<p:inputText />
+				</p:column>
+			</p:row>
+			<p:row>
+				<p:column>
+					<p:outputLabel value="Nome:" />
+				</p:column>
+				<p:column colspan="3">
+					<p:inputText />
+				</p:column>
+			</p:row>
+			<p:row>
+				<p:column>
+					<p:outputLabel value="Sexo:" />
+				</p:column>
+				<p:column>
+					<p:inputText />
+				</p:column>
+				<p:column>
+					<p:outputLabel value="Idade:" />
+				</p:column>
+				<p:column>
+					<p:inputText />
+				</p:column>
+			</p:row>
+			<p:row>
+				<p:column>
+					<p:outputLabel value="Interesses:" />
+				</p:column>
+				<p:column colspan="3">
+					<p:inputTextarea/>
+				</p:column>
+			</p:row>
+			<p:row>
+				<p:column colspan="4">
+					<p:fieldset legend="Contatos">
+						<p:panelGrid style="width: 100%">
+							<p:row>
+								<p:column>
+									<p:outputLabel value="Email:" />
+									<p:inputText />
+								</p:column>
+								<p:column>
+									<p:outputLabel value="Telefone:" />
+									<p:inputText />
+								</p:column>
+								<p:column>
+									<p:commandButton value="Adicionar" />
+								</p:column>
+							</p:row>
+							<p:row>
+								<p:column colspan="3">
+									<p:dataTable>
+										<p:column headerText="Email">
+											<h:outputText />
+										</p:column>
+										<p:column headerText="Telefone">
+											<h:outputText />
+										</p:column>
+									</p:dataTable>
+								</p:column>
+							</p:row>
+						</p:panelGrid>
+					</p:fieldset>
+				</p:column>
+			</p:row>
+		</p:panelGrid>
+
+
+	</ui:define>
+</ui:composition>
+
+</html>
