@@ -14,7 +14,7 @@ public class ClienteDAOImpl implements ClienteDAO {
 
 	@Override
 	public boolean inserirCliente(Cliente cliente) {
-		
+
 		EntityManager ent = JpaUtil.getEntityManager();
 		EntityTransaction tx = ent.getTransaction();
 
@@ -28,14 +28,37 @@ public class ClienteDAOImpl implements ClienteDAO {
 		return true;
 	}
 
-	@Override
-	public List<Cliente> pesquisarCliente(Cliente cliente) {
-		
-		String sql = "from Cliente c where 1=1 ";
-		
-		if(cliente.getCpf() != null && !cliente.getCpf().isEmpty()) {
-			sql += " and c.cpf = '" + cliente.getCpf() + "'";
+	private String montarWhere(Cliente cliente, Contato contato) {
+
+		String where = "";
+
+		if (cliente.getCpf() != null && !cliente.getCpf().isEmpty()) {
+			where += " and cl.cpf = '" + cliente.getCpf() + "'";
+		} else {
+			if (cliente.getNome() != null && !cliente.getNome().isEmpty()) {
+				where += " and upper(cl.nome) like '%" + cliente.getNome().toUpperCase() + "%'";
+			}
+
+			if (cliente.getSexo() != null && !cliente.getSexo().isEmpty()) {
+				where += " and cl.sexo = '" + cliente.getSexo() + "'";
+			}
+
+			if (contato.getEmail() != null && !contato.getEmail().isEmpty()) {
+				where += " and upper(co.email) like '%" + contato.getEmail().toUpperCase() + "%'";
+			}
+
+			if (contato.getTelefone() != null && !contato.getTelefone().isEmpty()) {
+				where += " and co.telefone like '%" + contato.getTelefone() + "%'";
+			}
 		}
+		return where;
+	}
+
+	@Override
+	public List<Cliente> pesquisarCliente(Cliente cliente, Contato contato) {
+
+		String sql = "Select cl from Cliente cl, Contato co " + " where cl.cpf = co.cliente.cpf "
+				+ montarWhere(cliente, contato);
 
 		EntityManager ent = JpaUtil.getEntityManager();
 
@@ -50,16 +73,16 @@ public class ClienteDAOImpl implements ClienteDAO {
 
 	@Override
 	public boolean adicionarContatoCliente(Cliente cliente) {
-		
+
 		EntityManager ent = JpaUtil.getEntityManager();
 		EntityTransaction tx = ent.getTransaction();
 
 		tx.begin();
-		
+
 		for (Contato contato : cliente.getListaContatos()) {
-			ent.merge(contato);			
+			ent.merge(contato);
 		}
-		
+
 		tx.commit();
 		ent.close();
 
@@ -68,7 +91,7 @@ public class ClienteDAOImpl implements ClienteDAO {
 
 	@Override
 	public boolean removerContatoCliente(Cliente cliente) {
-		
+
 		EntityManager ent = JpaUtil.getEntityManager();
 		EntityTransaction tx = ent.getTransaction();
 
@@ -76,25 +99,25 @@ public class ClienteDAOImpl implements ClienteDAO {
 
 		for (Contato contato : cliente.getListaContatos()) {
 			Contato existe = ent.find(Contato.class, contato.getId());
-			if(existe != null) {
+			if (existe != null) {
 				ent.remove(existe);
 			}
 		}
-		
+
 		tx.commit();
 		ent.close();
 		return true;
-		
+
 	}
-	
+
 	public Cliente existeCliente(Cliente cliente) {
 		EntityManager ent = JpaUtil.getEntityManager();
 
 		Cliente existe = ent.find(Cliente.class, cliente.getCpf());
-		
+
 		ent.close();
 		return existe;
-		
+
 	}
 
 }

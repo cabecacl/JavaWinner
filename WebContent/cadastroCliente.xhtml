@@ -83,6 +83,17 @@
 										<p:column headerText="Telefone">
 											<h:outputText value="#{contatoGrid.telefone}"/>
 										</p:column>
+										<p:column>
+											<p:commandButton value="remover" update="@form" 
+												action="#{ClienteBean.removerContato}">
+												<f:setPropertyActionListener
+													target="#{ClienteBean.emailSel}"
+													value="#{contatoGrid.email}" />
+												<f:setPropertyActionListener
+													target="#{ClienteBean.telefoneSel}" 
+													value="#{contatoGrid.telefone}" />
+											</p:commandButton>
+										</p:column>
 									</p:dataTable>
 								</p:column>
 							</p:row>
