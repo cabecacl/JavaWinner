@@ -48,15 +48,23 @@ public class ClienteBean {
 	 * contatos
 	 */
 	public void salvar() {
-		this.clienteDAO.inserirCliente(cliente);
 		
-		FacesContext.getCurrentInstance().
-    	addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Sucesso", "Cliente inserido com sucesso"));
+		if(clienteDAO.existeCliente(cliente) == null) {
+			this.clienteDAO.inserirCliente(cliente);			
+			FacesContext.getCurrentInstance().
+			addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Sucesso", "Cliente inserido com sucesso"));
+		}else {
+			FacesContext.getCurrentInstance().
+			addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Erro", "Cliente já existe!"));
+		}
+				
 	}
 	/**
 	 * Metodo utilizado para adicionar o contato
 	 */
 	public void adicionarContato() {
+		
+		contato.setCliente(cliente);
 		this.cliente.getListaContatos().add(contato);
 		
 		//Necessario dar uma nova instancia, senão a mesma é afetado em uma nova inserção
