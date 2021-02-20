@@ -5,6 +5,7 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -25,7 +26,7 @@ public class Cliente {
 	@Column(name = "IDADE", nullable = false)
 	private int idade;
 	
-	@OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private List<Contato> listaContatos;
 
 	public String getCpf() {

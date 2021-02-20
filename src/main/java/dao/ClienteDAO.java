@@ -17,4 +17,8 @@ public interface ClienteDAO {
 	
 	public Cliente existeCliente(Cliente cliente);
 
+	public boolean removerContatoCliente(Contato contato);
+
+	public boolean removerCliente(Cliente cliente);
+
 }

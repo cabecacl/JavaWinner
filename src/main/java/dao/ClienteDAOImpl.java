@@ -57,7 +57,7 @@ public class ClienteDAOImpl implements ClienteDAO {
 	@Override
 	public List<Cliente> pesquisarCliente(Cliente cliente, Contato contato) {
 
-		String sql = "Select cl from Cliente cl, Contato co " + " where cl.cpf = co.cliente.cpf "
+		String sql = "Select distinct cl from Cliente cl, Contato co " + " where cl.cpf = co.cliente.cpf "
 				+ montarWhere(cliente, contato);
 
 		EntityManager ent = JpaUtil.getEntityManager();
@@ -120,4 +120,40 @@ public class ClienteDAOImpl implements ClienteDAO {
 
 	}
 
+	@Override
+	public boolean removerContatoCliente(Contato contato) {
+
+		EntityManager ent = JpaUtil.getEntityManager();
+		Contato existe = ent.find(Contato.class, contato.getId());
+
+		EntityTransaction tx = ent.getTransaction();
+
+		tx.begin();
+
+		
+		ent.remove(existe);
+
+		tx.commit();
+		ent.close();
+		return true;
+
+	}
+
+	@Override
+	public boolean removerCliente(Cliente cliente) {
+
+		EntityManager ent = JpaUtil.getEntityManager();
+		EntityTransaction tx = ent.getTransaction();
+		
+		Cliente existe = ent.find(Cliente.class, cliente.getCpf());
+
+		tx.begin();
+		
+		ent.remove(existe);
+
+		tx.commit();
+		ent.close();
+		return true;
+
+	}
 }

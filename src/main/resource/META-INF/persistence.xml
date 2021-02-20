@@ -9,7 +9,7 @@
 		
 		<properties>
 			<property name="javax.persistence.jdbc.url" 
-								value="jdbc:oracle:thin:@192.168.0.107:1521:XE" />
+								value="jdbc:oracle:thin:@localhost:1521:XE" />
 			<property name="javax.persistence.jdbc.user" value="JAVAWINNER" />
 			<property name="javax.persistence.jdbc.password" value="JAVAWINNER" />
 			<property name="javax.persistence.jdbc.driver" 

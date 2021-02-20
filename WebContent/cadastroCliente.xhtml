@@ -9,6 +9,9 @@
 		<h1 class="teste">Cadastro de Cliente</h1>
 	</ui:define>
 	<ui:define name="conteudo">
+	<f:metadata>
+	  <f:viewAction action="#{ClienteBean.inicializarCampos}" />
+	</f:metadata>
 		<p:growl id="growl" showDetail="true" />
 
 		<p:panelGrid style="width: 100%">

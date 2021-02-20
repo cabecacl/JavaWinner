@@ -76,10 +76,18 @@
 											<h:outputText value="#{clienteGrid.sexo}" />
 										</p:column>
 										<p:column headerText="#">
-											<p:commandButton value="Editarr" update="@form" />
+											<p:commandButton value="Editarr" update="@form" action="#{ClienteBean.editarCliente}">
+												<f:setPropertyActionListener
+													target="#{ClienteBean.cpfSelecionado}"
+													value="#{clienteGrid.cpf}" />
+											</p:commandButton>
 										</p:column>
 										<p:column headerText="#">
-											<p:commandButton value="Remover" update="@form" />
+											<p:commandButton value="Remover" update="@form" action="#{ClienteBean.removerCliente}">
+												<f:setPropertyActionListener
+													target="#{ClienteBean.cpfSelecionado}"
+													value="#{clienteGrid.cpf}" />
+											</p:commandButton>
 										</p:column>
 									</p:dataTable>
 								</p:column>

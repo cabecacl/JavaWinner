@@ -8,8 +8,6 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 
-import com.sun.media.sound.EmergencySoundbank;
-
 import dao.ClienteDAO;
 import dao.ClienteDAOImpl;
 import entidade.Cliente;
@@ -27,6 +25,15 @@ public class ClienteBean {
 
 	// Valores utilizados para regra de remover contato
 	private String emailSel, telefoneSel;
+	
+	// Atributo utilizado para limpar campos quando veem da tela de pesquisa
+	private boolean origemPesquisa = false;
+	
+	//Atributo utilizado para saber se esta em modo de edição ou inclusão
+	private boolean modoEdicao = false;
+	
+	//Valores para pesquisar e remover
+	private String cpfSelecionado; 
 
 	/**
 	 * Construtor ClienteBean, onde inicializa o clienteDAO, dando acesso ao banco
@@ -41,9 +48,14 @@ public class ClienteBean {
 	 * Metodo utilizado para zera e inicializar todos os campos e atributos
 	 */
 	public void inicializarCampos() {
-
-		this.cliente = new Cliente();
-		this.cliente.setListaContatos(new ArrayList<Contato>());
+		System.out.println("++++++++ entrou +++++++");
+		if(!origemPesquisa) { //Vai entrar aqui quando vier a primeira vez da pesquisa
+			this.cliente = new Cliente();
+			this.cliente.setListaContatos(new ArrayList<Contato>());
+			modoEdicao = false;
+		}
+		
+		origemPesquisa = false;
 
 		// this.contato é o objeto referenciado para adicionar os contatos em tela
 		this.contato = new Contato();
@@ -55,16 +67,22 @@ public class ClienteBean {
 	 * Metodo utilizado para salvar o cliente com seus contatos
 	 */
 	public void salvar() {
-
-		if (clienteDAO.existeCliente(cliente) == null) {
+		
+		if(!modoEdicao) {
+			if (clienteDAO.existeCliente(cliente) == null) {
+				this.clienteDAO.inserirCliente(cliente);
+				FacesContext.getCurrentInstance().addMessage(null,
+						new FacesMessage(FacesMessage.SEVERITY_INFO, "Sucesso", "Cliente inserido com sucesso"));
+			} else {
+				FacesContext.getCurrentInstance().addMessage(null,
+						new FacesMessage(FacesMessage.SEVERITY_ERROR, "Erro", "Cliente já existe!"));
+			}			
+		}else {
 			this.clienteDAO.inserirCliente(cliente);
+			this.cliente = this.clienteDAO.existeCliente(cliente);
 			FacesContext.getCurrentInstance().addMessage(null,
-					new FacesMessage(FacesMessage.SEVERITY_INFO, "Sucesso", "Cliente inserido com sucesso"));
-		} else {
-			FacesContext.getCurrentInstance().addMessage(null,
-					new FacesMessage(FacesMessage.SEVERITY_ERROR, "Erro", "Cliente já existe!"));
+					new FacesMessage(FacesMessage.SEVERITY_INFO, "Sucesso", "Cliente alterado com sucesso"));
 		}
-
 	}
 
 	/**
@@ -107,7 +125,12 @@ public class ClienteBean {
 		}
 		
 		if(achou != null) {
+			if(achou.getId() > 0) {
+				this.clienteDAO.removerContatoCliente(achou);
+			}
+			
 			cliente.getListaContatos().remove(achou);
+			
 			FacesContext.getCurrentInstance().addMessage(null,
 					new FacesMessage(FacesMessage.SEVERITY_INFO, "Sucesso", "Contato removido"));
 		}
@@ -118,6 +141,38 @@ public class ClienteBean {
 		this.listaClientes = clienteDAO.pesquisarCliente(cliente, contato);
 	}
 
+	/**
+	 * Metodo utilizado para recuperar o cliente pelo cpf e abrir a tela de 
+	 * Cadastro de cliente com o mesmo preenchido
+	 * @return
+	 */
+	public String editarCliente() {
+		
+		this.origemPesquisa = true;
+		this.modoEdicao = true;
+		
+		Cliente clientePesquisa = new Cliente();
+		clientePesquisa.setCpf(cpfSelecionado);
+		
+		this.cliente = this.clienteDAO.existeCliente(clientePesquisa);
+		
+		return "/cadastroCliente.xhtml?faces-redirect=true&amp;includeViewParams=true";
+	}
+	
+	/**
+	 * Metodo utilizado para recuperar o cliente pelo cpf e depois remover da base,
+	 * atualizando a lista de pesquisa
+	 */
+	public void removerCliente() {
+		
+		Cliente clientePesquisa = new Cliente();
+		clientePesquisa.setCpf(cpfSelecionado);
+		
+		this.clienteDAO.removerCliente(clientePesquisa);
+		
+		this.pesquisarCliente();
+	}
+	
 	public Cliente getCliente() {
 		return cliente;
 	}
@@ -157,5 +212,14 @@ public class ClienteBean {
 	public void setTelefoneSel(String telefoneSel) {
 		this.telefoneSel = telefoneSel;
 	}
+
+	public String getCpfSelecionado() {
+		return cpfSelecionado;
+	}
+
+	public void setCpfSelecionado(String cpfSelecionado) {
+		this.cpfSelecionado = cpfSelecionado;
+	}
+
 
 }
